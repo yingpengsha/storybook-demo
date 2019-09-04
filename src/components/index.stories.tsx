@@ -1,8 +1,29 @@
 import React from 'react';
 
-import { storiesOf } from '@storybook/react';
+import { storiesOf, addDecorator } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { withInfo } from '@storybook/addon-info';
+import { setupGraphiQL } from '@storybook/addon-graphql'
+
+import { Button } from 'antd'
+
+import '../index.css';
 
 storiesOf('Button', module)
-  .add('with text', () => <button onClick={action('clicked')}>Hello Button</button>)
-  .add('with some emoji', () => <button onClick={action('clicked')}>😀 😎 👍 💯</button>);
+  .addDecorator(withInfo) 
+  .add('with text', () => <Button onClick={action('clicked')}>Hello Button</Button>)
+  .add('with some emoji', () => <Button onClick={action('clicked')}>😀 😎 👍 💯</Button>);
+
+
+const graphiql = setupGraphiQL({ url: 'https://demo.getsaleor.com/graphql/' });
+
+storiesOf('GraphQL Demo', module)
+  .add('get user info', graphiql(`{
+    product(id: "UHJvZHVjdDo2NA==") {
+      name
+      description
+      category {
+        name
+      }
+    }
+  }`));
